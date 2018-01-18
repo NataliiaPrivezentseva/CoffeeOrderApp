@@ -1,0 +1,41 @@
+# ignore all files with .iml extension
+*.iml
+
+# ignore built application's files
+/build
+/*/*/build
+
+# ignore Java class files
+*.class
+
+# ignore Local configuration file (sdk path, etc)
+/local.properties
+
+# ignore IntelliJ project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# ignore Gradle files
+.gradle
+
+# ignore log files
+*.log
+
+# ignore generated files
+bin/
+gen/
+out/
+
+# ignore Android Studio Navigation editor temp files
+.navigation/
+
+# ignore Android Studio captures folder
+captures/
+
+# ignore external native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild
+
+# ignore OSX files
+.DS_Store

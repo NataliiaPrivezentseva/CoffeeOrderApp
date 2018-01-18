@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Just Java</string>
+    <string name="quantity">Quantity</string>
+    <string name="zero" translatable="false">0</string>
+    <string name="order">Order</string>
+    <string name="order_summary">Order summary</string>
+    <string name="empty_price" translatable="false">0</string>
+    <string name="plus" translatable="false">+</string>
+    <string name="minus" translatable="false">–</string>
+    <string name="toppings">Toppings</string>
+    <string name="whipped_cream">Whipped cream</string>
+    <string name="chocolate">Chocolate</string>
+    <string name="name">Name</string>
+    <string name="coffee_order">Coffee order</string>
+    <string name="with_two_toppings">With whipped cream and chocolate</string>
+    <string name="without_toppings">Without toppings</string>
+    <string name="with_chocolate">With chocolate</string>
+    <string name="with_whipped_cream">With whipped cream</string>
+    <string name="total_price">Total price: </string>
+    <string name="thank_you">Thank you!</string>
+    <string name="too_small_order">You can\'t order less than one cup of coffee</string>
+    <string name="too_big_order">You can\'t order more than 100 cups of coffee</string>
+</resources>

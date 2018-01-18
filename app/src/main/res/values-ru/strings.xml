@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Just Java</string>
+    <string name="quantity">Количество</string>
+    <string name="order">Заказать</string>
+    <string name="order_summary">Итого:</string>
+    <string name="toppings">Добавки</string>
+    <string name="whipped_cream">Взбитые сливки</string>
+    <string name="chocolate">Шоколад</string>
+    <string name="name">Имя</string>
+    <string name="coffee_order">Заказ кофе</string>
+    <string name="with_two_toppings">Со взбитыми сливками и шоколадом</string>
+    <string name="without_toppings">Без добавок</string>
+    <string name="with_chocolate">С шоколадом</string>
+    <string name="with_whipped_cream">Со взбитыми сливками</string>
+    <string name="total_price">Стоимость заказа: </string>
+    <string name="thank_you">Спасибо за заказ!</string>
+    <string name="too_small_order">Нельзя заказать меньше одной чашки кофе</string>
+    <string name="too_big_order">Вы не можете заказать больше 100 чашек кофе в одном заказе</string>
+</resources>
