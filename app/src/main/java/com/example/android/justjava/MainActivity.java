@@ -18,8 +18,12 @@ import java.util.Locale;
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
-    int quantity = 0;
-    String shownPrice;
+    CheckBox whippedCreamCheckBox;
+    CheckBox chocolateCheckBox;
+    EditText usersName;
+
+    int quantity;
+
     final int standardCoffeePrice = 5;
     final int whippedCreamPrice = 1;
     final int chocolateToppingPrice = 2;
@@ -28,65 +32,105 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initialUISetup();
+    }
+
+    /**
+     * This method initializes listeners for checkboxes that shows user's choice of toppings.
+     */
+    public void initialUISetup() {
+        whippedCreamCheckBox = findViewById(R.id.whipped_cream_checkbox);
+        chocolateCheckBox = findViewById(R.id.chocolate_checkbox);
+
+        whippedCreamCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!coffeeIsOrdered()) {
+                    return;
+                }
+                displayMessage(constructTotalPrice());
+            }
+        });
+
+        chocolateCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!coffeeIsOrdered()) {
+                    return;
+                }
+                displayMessage(constructTotalPrice());
+            }
+        });
+    }
+
+    private boolean coffeeIsOrdered(){
+        if (quantity == 0 && (whippedCreamCheckBox.isChecked() || chocolateCheckBox.isChecked())) {
+            Context context = getApplicationContext();
+            CharSequence text = getString(R.string.only_toppings);
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return false;
+        }
+        return true;
     }
 
     /**
      * This method is called when the order button is clicked.
      */
-    public void submitOrder(View view) {
-        // Get user's name
-        EditText usersName = findViewById(R.id.name_edit_text_view);
-        String name = usersName.getText().toString();
-
-        // Figure out if the user wants whipped cream topping
-        CheckBox whippedCreamCheckBox = findViewById(R.id.whipped_cream_checkbox);
-        boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
-
-        // Figure out if the user wants chocolate topping
-        CheckBox chocolateCheckBox = findViewById(R.id.chocolate_checkbox);
-        boolean hasChocolate = chocolateCheckBox.isChecked();
-
-        // Count the total price of the order
-        int totalPrice = calculateCost(hasWhippedCream, hasChocolate);
-
-        // Make shownPrice with currency that depends on Locale
-        Locale currentLocale = Locale.getDefault();
-        Currency currency = Currency.getInstance(currentLocale);
-        if (currentLocale.equals(Locale.US)){
-            shownPrice = " " + currency.getSymbol() + totalPrice;
-        } else {
-            shownPrice = " " + totalPrice + " " + currency.getSymbol();
-        }
-
-        // Shows current price to user
-        displayMessage(shownPrice);
-
+    public void sendOrder(View view) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", "nataliia.privezentseva@gmail.com", null));
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.coffee_order));
-        intent.putExtra(Intent.EXTRA_TEXT, createOrderSummary(name, hasWhippedCream, hasChocolate));
+        intent.putExtra(Intent.EXTRA_TEXT, createOrderSummary());
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
     }
 
     /**
-     * This method creates an order summary based on given total price of the order.
+     * This method constructs and returns total price with currency sign, which depends on Locale.
+     *
+     * @return String that is a total price of the order with currency sign
      */
-    private String createOrderSummary(String usersName, boolean hasWhippedCream, boolean hasChocolate) {
+    private String constructTotalPrice(){
+        String totalPrice;
+        Locale currentLocale = Locale.getDefault();
+        Currency currency = Currency.getInstance(currentLocale);
+        if (currentLocale.equals(Locale.US)){
+            totalPrice = " " + currency.getSymbol() + calculateCost();
+        } else {
+            totalPrice = " " + calculateCost() + " " + currency.getSymbol();
+        }
+        return totalPrice;
+    }
+
+    /**
+     * This method creates an order summary based on given total price of the order.
+     *
+     * @return String that contains all order details
+     */
+    private String createOrderSummary() {
+        // Get user's name
+        usersName = findViewById(R.id.name_edit_text_view);
+
         String toppings;
-        if (hasWhippedCream && hasChocolate) {
+        if (whippedCreamCheckBox.isChecked() && chocolateCheckBox.isChecked()) {
             toppings = getString(R.string.with_two_toppings);
-        } else if (!hasWhippedCream && !hasChocolate) {
+        } else if (!whippedCreamCheckBox.isChecked() && !chocolateCheckBox.isChecked()) {
             toppings = getString(R.string.without_toppings);
-        } else if (!hasWhippedCream) {
+        } else if (!whippedCreamCheckBox.isChecked()) {
             toppings = getString(R.string.with_chocolate);
         } else {
             toppings = getString(R.string.with_whipped_cream);
         }
-        return getString(R.string.name) + ": " + usersName + "\n" + getString(R.string.quantity) +
-                ": " + quantity + "\n" + toppings + "\n" + getString(R.string.total_price) +
-                shownPrice + "\n" + getString(R.string.thank_you);
+        return getString(R.string.order_summary) +
+                "\n" + getString(R.string.name) + ": " + usersName.getText().toString() +
+                "\n" + getString(R.string.quantity) + ": " + quantity +
+                "\n" + toppings +
+                "\n" + getString(R.string.total_price) + constructTotalPrice() +
+                "\n" + getString(R.string.thank_you);
     }
 
     /**
@@ -94,12 +138,12 @@ public class MainActivity extends AppCompatActivity {
      *
      * @return the total price of order
      */
-    private int calculateCost(boolean hasWhippedCream, boolean hasChocolate) {
+    private int calculateCost() {
         int coffeePrice = standardCoffeePrice;
-        if (hasWhippedCream){
+        if (whippedCreamCheckBox.isChecked()){
             coffeePrice = coffeePrice + whippedCreamPrice;
         }
-        if (hasChocolate){
+        if (chocolateCheckBox.isChecked()){
             coffeePrice = coffeePrice + chocolateToppingPrice;
         }
         return quantity * coffeePrice;
@@ -120,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
         displayQuantity(quantity);
+        displayMessage(constructTotalPrice());
     }
 
     /**
@@ -137,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
         displayQuantity(quantity);
+        displayMessage(constructTotalPrice());
     }
 
     /**

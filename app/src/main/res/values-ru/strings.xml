@@ -3,7 +3,8 @@
     <string name="app_name">Just Java</string>
     <string name="quantity">Количество</string>
     <string name="order">Заказать</string>
-    <string name="order_summary">Итого:</string>
+    <string name="order_summary">Заказ:</string>
+    <string name="empty_price">бесплатно</string>
     <string name="toppings">Добавки</string>
     <string name="whipped_cream">Взбитые сливки</string>
     <string name="chocolate">Шоколад</string>
